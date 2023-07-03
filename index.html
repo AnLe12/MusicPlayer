@@ -73,18 +73,7 @@
     </div>
 
     <script>
-      /**
-       * 1. Render songs
-       * 2. Scroll top
-       * 3. Play/Pause/ Seek
-       * 4. CD rotate
-       * 5 Next/ Prev
-       * 6. Random
-       * 7. Next/ Repeat when ended
-       * 8. Active song
-       * 9. Scroll active song into view
-       * 10. Play song when click
-       */
+      
       const $= document.querySelector.bind(document)
       const $$= document.querySelectorAll.bind(document)
       const PLAYER_STORAGE_KEY = 'MUSIC_PLAYER'
@@ -205,7 +194,7 @@
           
           const cdWidth = cd.offsetWidth
 
-          // Xử lý phóng to/ thu nhỏ CD
+          // Zoom in and zoom out for CD
           document.onscroll = function(){
             const scrollTop = window.scrollY || document.documentElement.scrollTop
             const newCDWidth = cdWidth -scrollTop
@@ -216,7 +205,7 @@
 
           }
 
-          // xử lý khi click play
+          // Handle click on play button
           playBtn.onclick = function(){
             if(_this.isPlaying){
               audio.pause()
@@ -226,21 +215,21 @@
             }
           }
 
-          // khi bài hát được play
+          // Play music
           audio.onplay = function(){
               _this.isPlaying = true
               player.classList.add('playing')
               cdThumbAnimate.play()
           }
 
-          // khi bài hát bị pause
+          // pause song
           audio.onpause = function(){
               _this.isPlaying = false
               player.classList.remove('playing')
               cdThumbAnimate.pause()
           }
 
-          // KHi tiến độ bài hat thay đổi
+          // Update Time running
           audio.ontimeupdate= function(){
             if(audio.duration){
               const progressPercent = Math.floor(audio.currentTime/audio.duration *100)
@@ -249,13 +238,13 @@
             
           }
 
-          // Xử lý khi tua bài hát
+          // Seek time
           progress.onchange = function(e){
             const seekTime = (e.target.value/ 100 * audio.duration)
             audio.currentTime =seekTime
           }
 
-          // Xử lý CD quay và dừng
+          // Handle CD rotate and pause
           const cdThumbAnimate = cdThumb.animate([
             {transform:'rotate(360deg)'}
           ],{
@@ -265,7 +254,7 @@
 
           cdThumbAnimate.pause()
 
-          // Khi next bài hát
+          // handle for next song
           nextBtn.onclick = function(){
             if(_this.isRandom){
               _this.playRandomSong()
@@ -278,7 +267,7 @@
             _this.scrollToActiveSong()
           }
 
-          // Khi prev bài hát
+          // Handle for previous song
           prevBtn.onclick = function(){
             if(_this.isRandom){
               _this.playRandomSong()
@@ -291,14 +280,14 @@
             _this.scrollToActiveSong()
           }
           
-          // Khi bấm vào nút random thì xử lý html 
+          // Random song
           randomBtn.onclick = function(e){
             _this.isRandom = !_this.isRandom
             _this.setConfig("isRandom", _this.isRandom)
             randomBtn.classList.toggle('active', _this.isRandom)
 
           }
-          // Xử lý next song khi audio ended ( repeat or next song)
+          // Handle when music end
           audio.onended = function(){
             if(_this.isRepeat){
               audio.play()
@@ -308,7 +297,7 @@
             }
           }
 
-          // Xử lý lặp lại một bài hát
+          // repeat the song
           repeatBtn.onclick = function(e){
             _this.isRepeat = !_this.isRepeat
             _this.setConfig("isRepeat", _this.isRepeat)
@@ -317,7 +306,7 @@
           playlist.onclick = function(e){
             const songNode = e.target.closest('.song:not(.active)')
             if(songNode || e.target.closest('.option')){
-              // xử lý khi click vào song thì chuyển tới bài đó
+              // Handle to pick song
               if(songNode){
                 // console.log(songNode.getAttribute('data-index'))
                 _this.currentIndex = Number(songNode.dataset.index)
@@ -343,10 +332,6 @@
             })
         },300)
         },
-
-        // Lắng nghe hành vi click vào playlist
-        
-
 
         loadCurrentSong: function(){
           heading.textContent = this.currentSong.name
@@ -383,21 +368,21 @@
         },
 
         start: function(){
-          // Gán cấu hình từ config vào ứng dụng:
+          // assign config:
           this.loadConfig()
-          //định nghĩa các thuoccj tính cho object
+          /
           this.defineProperties()
           
           // Render Playlist
           this.render()
           
-          // Lắng nghe và xử lý các suwjk iện
+          
           this.handleEvent()
 
-          // Tải thông tin bài hát đầu tiên vào UI khi chạy ứng dụng
+          
           this.loadCurrentSong()
 
-          // Hiển thị trạng thái ban đầu của button repeat và random
+          
           repeatBtn.classList.toggle('active', this.isRepeat)
           randomBtn.classList.toggle('active', this.isRandom)
         }, 
