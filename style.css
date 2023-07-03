@@ -131,6 +131,7 @@
 
   /* PLAYLIST */
     .playlist {
+        max-width: 480px;
         margin-top: 408px;
         padding: 12px;
     }
