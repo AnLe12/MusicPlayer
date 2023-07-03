@@ -180,7 +180,7 @@
           playlist.innerHTML = htmls.join('')
         },
 
-        // Hàm này để xử dụng _this. ( Phải khai báo trước mới xài được)
+        // use _this instead of this
         defineProperties: function(){
           Object.defineProperty(this,'currentSong',{
             get: function(){
